@@ -11,6 +11,29 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class MainTest {
 
+    public enum OS {
+        WINDOWS, LINUX, MAC, SOLARIS
+    }
+
+    private static OS os = null;
+
+    public static OS getOS() {
+        if (os == null) {
+            String operSys = System.getProperty("os.name").toLowerCase();
+            if (operSys.contains("win")) {
+                os = OS.WINDOWS;
+            } else if (operSys.contains("nix") || operSys.contains("nux")
+                    || operSys.contains("aix")) {
+                os = OS.LINUX;
+            } else if (operSys.contains("mac")) {
+                os = OS.MAC;
+            } else if (operSys.contains("sunos")) {
+                os = OS.SOLARIS;
+            }
+        }
+        return os;
+    }
+
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
     private final PrintStream originalOut = System.out;
@@ -31,6 +54,10 @@ class MainTest {
     @Test
     void stubTest() {
         Main.main(new String[]{});
-        assertEquals("CI/CD rocks!\r\n", outContent.toString());
+        if (getOS() == OS.WINDOWS) {
+            assertEquals("CI/CD rocks!\r\n", outContent.toString());
+        } else {
+            assertEquals("CI/CD rocks!\n", outContent.toString());
+        }
     }
 }
