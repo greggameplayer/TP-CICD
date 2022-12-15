@@ -3,7 +3,7 @@ podTemplate(containers: [
 ]) {
     node(POD_LABEL) {
         container('maven') {
-            git url: scm.userRemoteConfigs[0].url, branch: scm.branches[0].name
+            git url: scm.userRemoteConfigs[0].url, branch: env.BRANCH_NAME
             stage('build') {
                 sh '''
                 mvn clean package -DskipTests
