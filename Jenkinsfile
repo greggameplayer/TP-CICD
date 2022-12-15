@@ -3,7 +3,7 @@ pipeline {
         kubernetes {
             containerTemplate {
                 name 'maven'
-                image 'maven:3.8.4-jdk-17'
+                image 'maven:3.8.4-openjdk-17-slim'
                 command 'sleep'
                 args '99d'
             }
